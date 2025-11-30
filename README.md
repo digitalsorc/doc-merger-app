@@ -57,6 +57,12 @@ pyinstaller --name MarkdownMerger --windowed --onefile main.py
 # The executable will be in the dist/ folder
 ```
 
+Alternatively, use the build script:
+
+```bash
+python scripts/build.py
+```
+
 ## Quick Start
 
 1. **Launch the application** by running `python main.py` or double-clicking the executable
@@ -166,6 +172,7 @@ markdown-merger/
 │       └── helpers.py       # Utility functions
 ├── tests/                   # Test suite
 ├── docs/                    # Documentation
+├── scripts/                 # Build scripts
 └── sample_files/            # Example files
 ```
 
