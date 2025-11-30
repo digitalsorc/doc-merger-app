@@ -1,42 +1,32 @@
-name: Build and Release
+name: Build Windows executable
 
 on:
-  push:
-    tags:
-      - 'v*'  # Triggers on version tags like v1.0.0
-  workflow_dispatch:  # Manual trigger button
+  workflow_dispatch:  # manual trigger from the Actions tab
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-    
+  build-windows:
+    runs-on: windows-latest
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-        pip install pyinstaller
-    
-    - name: Build executable
-      run: pyinstaller --name MarkdownMerger --windowed --onefile main.py
-    
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: MarkdownMerger-${{ matrix.os }}
-        path: dist/*
-    
-    - name: Create Release
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: softprops/action-gh-release@v1
-      with:
-        files: dist/*
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyQt6 chardet pyyaml pyinstaller
+
+      - name: Build executable with PyInstaller
+        run: |
+          pyinstaller --name DocMerger --windowed --onefile main.py
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DocMerger-windows
+          path: dist/*
